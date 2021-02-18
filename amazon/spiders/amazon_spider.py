@@ -23,7 +23,8 @@ class AmazonSpiderSpider(scrapy.Spider):
 
         for item in items:
             if AmazonSpiderSpider.i < 50:
-                total_reviews_url = 'https://www.amazon.com' + reviews_urls[id]
+                complete_reviews_url = 'https://www.amazon.com' + \
+                    reviews_urls[id]
                 yield{
                     'id': AmazonSpiderSpider.i + 1,
                     'item_name': item,
@@ -31,7 +32,7 @@ class AmazonSpiderSpider(scrapy.Spider):
                     'image_url': image_urls[id],
                     'item_rating': item_ratings[id]
                 }
-                yield scrapy.Request(total_reviews_url, callback=self.reviews_func)
+                yield scrapy.Request(complete_reviews_url, callback=self.reviews_func)
             id += 1
             AmazonSpiderSpider.i = AmazonSpiderSpider.i+1
 
@@ -43,8 +44,8 @@ class AmazonSpiderSpider(scrapy.Spider):
     def reviews_func(self, response):
         see_all_reviews_url = response.xpath(
             '//*[@id="reviews-medley-footer"]/div[2]/a/@href').get()
-        total_see_all_reviews_url = 'https://www.amazon.com' + see_all_reviews_url
-        yield scrapy.Request(total_see_all_reviews_url, callback=self.all_reviews_func)
+        complete_see_all_reviews_url = 'https://www.amazon.com' + see_all_reviews_url
+        yield scrapy.Request(complete_see_all_reviews_url, callback=self.all_reviews_func)
 
     def all_reviews_func(self, response):
         id = 0
