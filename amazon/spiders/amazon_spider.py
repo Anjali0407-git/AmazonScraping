@@ -35,8 +35,7 @@ class AmazonSpiderSpider(scrapy.Spider):
             id += 1
             AmazonSpiderSpider.i = AmazonSpiderSpider.i+1
 
-        next_page = response.xpath(
-            '//*[@id="search"]/div[1]/div[2]/div/span[3]/div[2]/div[17]/span/div/div/ul/li[7]/a/@href').get()
+        next_page = response.css('.a-last a::attr(href)').get()
         if next_page is not None:
             next_page = response.urljoin(next_page)
             yield scrapy.Request(next_page, callback=self.parse)
